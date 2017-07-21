@@ -1,9 +1,8 @@
 #==============================================================================
 # Code by Jacob MacDougall
-#
-# This class is used to make queries for SQLite databases.
-# They are to be used the comment and submission object found in the
-# praw module.
+# 
+# This class is used as a way to make queries for SQLite based on databases
+# I created for use with the 'praw' module/
 #==============================================================================
 
 from datetime import datetime
@@ -14,14 +13,14 @@ from nltk.tokenize import word_tokenize
 class SQL_submission(object):
     """
     NOTE:
-    The function make_label() is specific only to the Canada subreddit.
+    The function make_label is specific only to the Canada subreddit.
     The only purpose is to automate the creation of labels for each submission
     These labels are used in classification ML programs.
-    It is NOT a ML program at all. It's purpose is to help me label the
+    It is NOT a ML program at all. It's purpose is to help me label the 
     submissions that come in. A lot of the labels are actually too general
-    (e.g. News, Politics, Fluff) and will require human intuition
+    (e.g. News, Politics, Fluff) and will require human intuition 
     in order to come up with a more proper label.
-    It's basically just me saving time.
+    It's basically jsut me saving time.
     """
     # Labels:
     politics = "Politics"
@@ -33,7 +32,6 @@ class SQL_submission(object):
     housing = "Housing"
     internet = "Internet"
     fluff = "Fluff"
-    islam = "Islam"
     news = "News"
     self_post = "Self-post"
     other = "Other"
@@ -47,9 +45,9 @@ class SQL_submission(object):
                      "liberals", "NDP", "Conversative",
                      "parliament", "law", "bill",
                      "elections"]
-    terrorism_list = ["gun", "attack", "attacker", "attacks", "terrorism",
+    terrorism_list = ["islam", "muslism", "mosque", "allah", "sharia", "syria", "syrian","imam",
+                      "gun", "attack", "attacker", "attacks", "terrorism",
                       "archibald"]
-    islam_list = ["islam", "muslism", "mosque", "allah", "sharia", "syria", "syrian","imam"]
     climate_list = ["climate", "paris"]
     economy_list = ["wage", "job",
                     "economy", "economic", "gdp",
@@ -88,9 +86,7 @@ class SQL_submission(object):
         for w in title:
             word = w.lower()
             # Terrorism
-            if word in self.islam_list:
-                label = self.islam
-            elif word in self.terrorism_list:
+            if word in self.terrorism_list:
                 label = self.terrorism
             # Climate
             elif word in self.climate_list \
@@ -117,18 +113,14 @@ class SQL_submission(object):
                     and label != self.housing \
                     and label != self.marijuana \
                     and label != self.climate \
-                    and label != self.terrorism \
-                    and label != self.islam \
                     and label != self.health:
                 label = self.economy
             # Politics
             elif word in self.politics_list \
                     and label != self.internet \
-                    and label != self.housing \
+                    and label != self.terrorism \
                     and label != self.marijuana \
                     and label != self.climate \
-                    and label != self.terrorism \
-                    and label != self.islam \
                     and label != self.health:
                 label = self.politics
         if label == "":
@@ -305,3 +297,12 @@ class SQL_comment(object):
             "total_com_score = total_com_score + {} WHERE user_id = '{}'".format(
             str(entry.ups),auth)
         return query
+
+
+
+
+
+
+
+
+
