@@ -10,7 +10,7 @@ from nltk.tokenize import word_tokenize
 # from nltk.tokenize import wordpunct_tokenize
 # wordpunct_tokenize(s)
 
-db = sqlite3.connect('/Users/jacobmacdougall/canada/canada.db')
+db = sqlite3.connect('../../src/canada.db')
 cur = db.cursor()
 cur.execute('''
 SELECT c.body, s.label
