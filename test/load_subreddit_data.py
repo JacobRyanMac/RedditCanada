@@ -4,14 +4,13 @@ import praw
 import sqlite3 as sql
 
 # Constants
-#whichDatabase = '/Users/jacobmacdougall/canada/canada.db'
-whichDatabase = r"canada_subreddit.db"
+whichDatabase = r"canada_subreddit_test.db"
 whichSubreddit = 'canada'
 scoreMin = 50
 commentMin = 50
 commentLimit = 100
 commentThreshold = 0
-days_back = 4
+days_back = 1
 ext_to = datetime.datetime.now()
 #ext_to = datetime.datetime(2017, 6, 7, 12, 0, 0, 0)
 ext_from = ext_to - datetime.timedelta(days=days_back)
@@ -59,7 +58,7 @@ for submis in allSubmissions:
     db.close()
 
 # Too much trouble to fix the NULL statements otherwise:
-db = sql.connect(whichDatabase)
-db.execute("UPDATE comments SET edited = NULL WHERE edited = 'NULL';")
-db.commit()
-db.close()
+# db = sql.connect(whichDatabase)
+# db.execute("UPDATE comments SET edited = NULL WHERE edited = 'NULL';")
+# db.commit()
+# db.close()

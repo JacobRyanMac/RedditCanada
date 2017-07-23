@@ -238,10 +238,9 @@ class SQL_comment(object):
             cauth = comment.author.name
         # Edited:
         if not comment.edited:
-            cedit = 'NULL'
+            cedit = str(0)
         else:
-            cedit = datetime.fromtimestamp(
-                comment.edited, tz=timezone('US/Eastern')).strftime("%Y-%m-%d")
+            cedit = str(1)
         # Deleted:
         if comment.body == '[removed]' or comment.body == '[deleted]':
             comDel = str(1)
