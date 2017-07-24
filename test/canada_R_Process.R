@@ -1,5 +1,8 @@
 ## Housing market data sets
 
-setwd("/Users/jacobmacdougall/Google Drive/Kaggle/HousingMarket/")
-train = read.csv("train.csv")
-test = read.csv("test.csv")
+setwd("C:/Users/jacob/Projects/RedditCanada/test")
+data <- read.csv("comments_labeled.csv",header = TRUE,sep = "\t")
+
+cor(data)
+
+

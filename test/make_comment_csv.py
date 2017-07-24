@@ -4,7 +4,7 @@ import csv
 # from nltk.tokenize import wordpunct_tokenize
 # wordpunct_tokenize(s)
 
-db = sqlite3.connect(r"canada_subreddit.db")
+db = sqlite3.connect(r"canada_subreddit_test.db")
 cur = db.cursor()
 cur.execute('''
 SELECT s.label, s.title, s.domain, s.score, s.ratio, s.comments, c.*
@@ -13,6 +13,7 @@ WHERE s.submission_id = c.submission_id;
 ''')
 
 with open('comments_labeled.csv', 'w', newline='', encoding='utf-8') as file:
+    # Important to use \t since to avoid issues with the body of comments
     tsvfile = csv.writer(file, delimiter='\t')
     tsvfile.writerow(['label',
                       'sub_title',
