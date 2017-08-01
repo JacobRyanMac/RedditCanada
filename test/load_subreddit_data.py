@@ -29,7 +29,8 @@ allSubmissions = canada.submissions(int(time.mktime(ext_from.timetuple())),
 # Load the data into SQLite
 for submis in allSubmissions:
     db = sql.connect(whichDatabase)
-    if submis.score >= scoreMin or submis.num_comments >= commentMin:
+    # if submis.score >= scoreMin or submis.num_comments >= commentMin:
+    if submis.num_comments >= commentMin:
         # Enter submission:
         cur_submis = SQL_submission(submis)
         try:

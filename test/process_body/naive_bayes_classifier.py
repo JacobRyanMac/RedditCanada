@@ -1,12 +1,10 @@
-# Naive bayes
-
 import sqlite3
 import random
 import nltk
+import pickle
 
 from nltk import FreqDist
 from nltk.tokenize import word_tokenize
-
 # from nltk.tokenize import wordpunct_tokenize
 # wordpunct_tokenize(s)
 
@@ -50,3 +48,11 @@ testing_set = featuresets[k:]
 classifier = nltk.NaiveBayesClassifier.train(training_set)
 print("Naive Bayes Algo accuracy percent:", (nltk.classify.accuracy(classifier, testing_set)) * 100)
 classifier.show_most_informative_features(30)
+
+choice = input("Pickle? Enter True/False:")
+if choice:
+    save_classifier = open("naivebayes_housing_pot.pickle","wb")
+    pickle.dump(classifier, save_classifier)
+    pickle.dump(training_set, save_classifier)
+    pickle.dump(testing_set, save_classifier)
+    save_classifier.close()
