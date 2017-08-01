@@ -8,7 +8,7 @@ from pprint import pprint
 import pandas
 import numpy
 
-library = '/Users/jacobmacdougall/canada/submissions/'
+library = '../'
 post_id = '6eq9fa'
 stop_words = set(stopwords.words("english"))
 stop_words.update(['.', ',', '"', "'", '?', '!',

@@ -10,7 +10,7 @@ scoreMin = 50
 commentMin = 50
 commentLimit = 100
 commentThreshold = 0
-days_back = 1
+days_back = 2
 ext_to = datetime.datetime.now()
 #ext_to = datetime.datetime(2017, 6, 7, 12, 0, 0, 0)
 ext_from = ext_to - datetime.timedelta(days=days_back)
