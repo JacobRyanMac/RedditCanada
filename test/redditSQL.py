@@ -92,24 +92,32 @@ class SQL_submission(object):
                 label = self.islam
             elif word in self.terrorism_list:
                 label = self.terrorism
-            # Climate
-            elif word in self.climate_list \
-                    and label != self.marijuana:
-                label = self.climate
             # Pot
             elif word in self.marijuana_list:
                 label = self.marijuana
+            # Climate
+            elif word in self.climate_list \
+                    and label != self.marijuana \
+                    and label != self.islam \
+                    and label != self.terrorism:
+                label = self.climate
             # Housing
             elif word in self.housing_list \
-                    and label != self.marijuana:
+                    and label != self.marijuana \
+                    and label != self.islam \
+                    and label != self.terrorism:
                 label = self.housing
             # Internet
             elif word in self.internet_list \
-                    and label != self.marijuana:
+                    and label != self.marijuana \
+                    and label != self.islam \
+                    and label != self.terrorism:
                 label = self.internet
             # Health
             elif word in self.health_list \
-                    and label != self.marijuana:
+                    and label != self.marijuana \
+                    and label != self.islam \
+                    and label != self.terrorism:
                 label = self.health
             # Economy
             elif word in self.economy_list \

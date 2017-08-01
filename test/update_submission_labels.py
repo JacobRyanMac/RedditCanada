@@ -8,7 +8,7 @@ class fakeSubmis:
         self.domain = domain
 
 
-whichDatabase = r"canada_subreddit.db"
+whichDatabase = r"canada_subreddit_test.db"
 db = sqlite3.connect(whichDatabase)
 cur = db.cursor()
 cur.execute('SELECT title, domain, submission_id FROM submissions')
