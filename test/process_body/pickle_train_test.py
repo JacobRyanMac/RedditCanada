@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 
 # split by n means len(n)/5 are in train and 1/5 is in test
 split = lambda x: - int(len(x) / 5)
-file_name = "set_housing_pot.pickle"
+file_name = "set_housing_internet.pickle"
 db = sqlite3.connect('../canada_subreddit_test.db')
 cur = db.cursor()
 cur.execute('''
@@ -14,7 +14,7 @@ SELECT c.body, s.label
 FROM submissions as s, comments as c
 WHERE s.submission_id = c.submission_id
 AND (s.label = 'Housing'
-OR s.label = 'Pot');
+OR s.label = 'Internet');
 ''')
 
 documents = [(word_tokenize(c[0]), c[1]) for c in cur]

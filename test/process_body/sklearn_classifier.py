@@ -7,12 +7,17 @@ from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import SVC, LinearSVC, NuSVC
 
+pickle_file = "set_housing_internet.pickle"
+
 # 'rb' means read bytes, as opposed to read string
-with open("naivebayes_housing_pot.pickle","rb") as file:
-    naive_classifier = pickle.load(file)
+with open(pickle_file,"rb") as file:
     training_set = pickle.load(file)
     testing_set = pickle.load(file)
     file.close()
+
+Naive_classifier = nltk.NaiveBayesClassifier.train(training_set)
+print("Naive Bayes Algo accuracy percent:", (nltk.classify.accuracy(Naive_classifier, testing_set)) * 100)
+Naive_classifier.show_most_informative_features(30)
 
 MNB_classifier = SklearnClassifier(MultinomialNB())
 MNB_classifier.train(training_set)
