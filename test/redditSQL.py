@@ -47,7 +47,7 @@ class SQL_submission(object):
                      "liberals", "NDP", "Conversative",
                      "parliament", "law", "bill",
                      "elections"]
-    terrorism_list = ["gun", "attack", "attacker", "attacks", "terrorism",
+    terrorism_list = ["gun", "attack", "attacker", "terrorism",
                       "archibald","islam", "muslism", "mosque", "allah", "sharia", "syria",
                                     "syrian","imam"]
     islam_list = []
