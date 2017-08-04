@@ -48,9 +48,9 @@ class SQL_submission(object):
                      "parliament", "law", "bill",
                      "elections"]
     terrorism_list = ["gun", "attack", "attacker", "attacks", "terrorism",
-                      "archibald"]
-    islam_list = ["islam", "muslism", "mosque", "allah", "sharia", "syria",
-                  "syrian","imam"]
+                      "archibald","islam", "muslism", "mosque", "allah", "sharia", "syria",
+                                    "syrian","imam"]
+    islam_list = []
     climate_list = ["climate", "paris"]
     economy_list = ["wage", "job",
                     "economy", "economic", "gdp",
