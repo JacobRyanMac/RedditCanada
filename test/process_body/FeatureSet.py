@@ -4,7 +4,7 @@ import nltk
 from nltk import FreqDist
 from nltk.tokenize import word_tokenize
 
-class FeatureSet(object):
+class Features(object):
     """
     This object will hold a feature set that will be used to train classifiers.
     They are intiated with SQL statement that needs to have the following:
@@ -16,6 +16,7 @@ class FeatureSet(object):
         self.SQL_query = SQL_query
         self.SQL_db = SQL_db
 
+
     @staticmethod
     def find_features(body, feature_list):
         words = set(body)
@@ -24,7 +25,7 @@ class FeatureSet(object):
             features[w] = (w in words)
         return features
 
-    def make_features(self):
+    def make_featureset(self):
         db = sqlite3.connect(self.SQL_db)
         cur = db.cursor()
         cur.execute(self.SQL_query)
@@ -32,7 +33,6 @@ class FeatureSet(object):
         db.close()
 
         random.shuffle(comments)
-
         all_words = []
         for c in comments:
             for w in c[0]:
@@ -42,7 +42,6 @@ class FeatureSet(object):
                         word = word.replace('*','')
                     all_words.append(word.lower())
         all_words = FreqDist(all_words)
-
         word_features = list(all_words.keys())[:4000]
 
         featuresets = []
@@ -55,8 +54,6 @@ class Threads(object):
     '''
     This file will create threads from a given database and put them in the
     given folder.
-
-
     '''
     def __init__(self,database,folder):
         self.database = database

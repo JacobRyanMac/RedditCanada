@@ -1,17 +1,9 @@
-'''
-We want to have a script that makes feature sets out of comments
-Feature sets are dictionaries.
-classify each comment of a submission
-create sums of the classifiers
-give that as distribution of what the submission is about
-'''
-import sqlite3
-import random
-import nltk
 import pickle
-from nltk import FreqDist
-from nltk.tokenize import word_tokenize
+import nltk
+from FeatureSet import Features
 
+pickle_file = "naive_bayes_classifier.pickle"
+database = '../canada_subreddit_test.db'
 SQL_query = '''
 SELECT c.body, s.label
 FROM submissions as s, comments as c
@@ -21,45 +13,9 @@ OR s.label = "Housing"
 OR s.label = "Pot");
 '''
 
-# Used to get 4/5 of the data for train, and 1/5 of the data for test
+featuresets = Features(SQL_query,database).make_featureset()
+
 split = lambda x: - int(len(x) / 5)
-
-# Connect to database a obtain all comments with given labels
-db = sqlite3.connect('../canada_subreddit_test.db')
-cur = db.cursor()
-cur.execute(SQL_query)
-
-# tokenize words and add the label, random the order and close the db
-comments = [(word_tokenize(c[0]), c[1]) for c in cur]
-random.shuffle(comments)
-db.close()
-
-# Gather all words from both labels
-all_words = []
-for c in comments:
-    for w in c[0]:
-        word = w
-        if word[:2] != "//":
-            if '*' in word:
-                word = word.replace('*','')
-            all_words.append(word.lower())
-all_words = FreqDist(all_words)
-print(all_words.B())
-
-# Get a random set of the words to use as features
-word_features = list(all_words.keys())[:4000]
-
-# make feature sets from each comment and mark it with a label
-# function returns a feature set of form {"example" : True, "word" : False}
-# it will be the length of word_features
-def find_features(document):
-    words = set(document)
-    features = {}
-    for w in word_features:
-        features[w] = (w in words)
-    return features
-featuresets = [(find_features(comment), label) for (comment, label) in comments]
-
 k = split(featuresets)
 training_set = featuresets[:k]
 testing_set = featuresets[k:]
@@ -68,6 +24,6 @@ Naive_classifier = nltk.NaiveBayesClassifier.train(training_set)
 print("Naive Bayes Algo accuracy percent:", (nltk.classify.accuracy(Naive_classifier, testing_set)) * 100)
 Naive_classifier.show_most_informative_features(30)
 
-save_classifier = open("naive_bayes_classifier.pickle","wb")
-pickle.dump(Naive_classifier, save_classifier)
-save_classifier.close()
+with open(pickle_file,"wb") as save_classifier:
+    pickle.dump(Naive_classifier, save_classifier)
+    save_classifier.close()
