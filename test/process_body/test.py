@@ -2,30 +2,37 @@ import sqlite3
 import pickle
 from pprint import pprint
 
-import random
-import nltk
-from nltk import FreqDist
-from nltk.tokenize import word_tokenize
+from FeatureSet import FeatureSet
 
+# import random
+# import nltk
+# from nltk import FreqDist
+# from nltk.tokenize import word_tokenize
+
+pickle_file = "logreg_classifier.pickle"
+database = '../canada_subreddit_test.db'
 SQL_query = '''
-SELECT c.body
+SELECT c.body, s.label
 FROM comments as c, submissions as s
 WHERE s.submission_id = c.submission_id
 AND s.created <= '2017-08-01'
-AND s.created >= '2017-07-01';
+AND s.created >= '2017-07-27';
 '''
 
-# Connect to database a obtain all comments with given labels
-db = sqlite3.connect('../canada_subreddit_test.db')
-cur = db.cursor()
-cur.execute(SQL_query)
-comments = [word_tokenize(c[0]) for c in cur]
-db.close()
+fs = FeatureSet(SQL_query,database).make_features()
 
-all_words = []
-for c in comments:
-    for w in c:
-        all_words.append(w.lower())
-all_words = FreqDist(all_words)
-word_features = list(all_words.keys())
-pprint(word_features)
+with open(pickle_file,"rb") as file:
+    classifier = pickle.load(file)
+    file.close()
+
+counter = 0
+for f in fs:
+    guess = classifier.classify(f[0])
+    print("Label:", f[1])
+    print("Guess:", guess)
+    print('\n')
+    if guess == f[1]:
+        counter =+ 1
+
+print(len(featuresets))
+print(str(counter))

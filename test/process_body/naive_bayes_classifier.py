@@ -16,10 +16,9 @@ SQL_query = '''
 SELECT c.body, s.label
 FROM submissions as s, comments as c
 WHERE s.submission_id = c.submission_id
-AND (s.label = "Housing"
-OR s.label = "Pot"
-OR s.label = "Terrorism"
-OR s.label = "Islam");
+AND (s.label = "Internet"
+OR s.label = "Housing"
+OR s.label = "Pot");
 '''
 
 # Used to get 4/5 of the data for train, and 1/5 of the data for test
@@ -39,12 +38,16 @@ db.close()
 all_words = []
 for c in comments:
     for w in c[0]:
-        all_words.append(w.lower())
+        word = w
+        if word[:2] != "//":
+            if '*' in word:
+                word = word.replace('*','')
+            all_words.append(word.lower())
 all_words = FreqDist(all_words)
-print(len(all_words.keys()))
+print(all_words.B())
 
 # Get a random set of the words to use as features
-word_features = list(all_words.keys())[:3000]
+word_features = list(all_words.keys())[:4000]
 
 # make feature sets from each comment and mark it with a label
 # function returns a feature set of form {"example" : True, "word" : False}
