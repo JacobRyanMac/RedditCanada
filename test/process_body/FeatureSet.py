@@ -6,16 +6,29 @@ from nltk.tokenize import word_tokenize
 
 class Features(object):
     """
-    This object will hold a feature set that will be used to train classifiers.
-    They are intiated with SQL statement that needs to have the following:
+    This object create feature sets that will be used to train classifiers.
+    Body must be of a list of tuples.
+    Each tuple will be a string of text of any length and a label
+    Example:
+        [("this is an example", Internet),
+         ("strings can be threads or comments!", Housing)]
+    """
+    def __init__(self, body=None):
+        self.body = body
+
+    '''
+    This method can create bodies if given a SQL statement with the form:
     SELECT c.body, s.label
     FROM comments as c, submissions as s
-    The WHERE statement can be anything really.
-    """
-    def __init__(self, SQL_query, SQL_db):
-        self.SQL_query = SQL_query
-        self.SQL_db = SQL_db
-
+    (The WHERE statement can be anything as long as it returns the correct SELECT)
+    '''
+    def execute_query(self, SQL_query, SQL_db):
+        db = sqlite3.connect(SQL_db)
+        cur = db.cursor()
+        cur.execute(SQL_query)
+        body = [(word_tokenize(c[0]), c[1]) for c in cur]
+        db.close()
+        self.body = body
 
     @staticmethod
     def find_features(body, feature_list):
@@ -25,16 +38,10 @@ class Features(object):
             features[w] = (w in words)
         return features
 
-    def make_featureset(self):
-        db = sqlite3.connect(self.SQL_db)
-        cur = db.cursor()
-        cur.execute(self.SQL_query)
-        comments = [(word_tokenize(c[0]), c[1]) for c in cur]
-        db.close()
-
-        random.shuffle(comments)
+    def make_featureset(self, body):
+        random.shuffle(body)
         all_words = []
-        for c in comments:
+        for c in body:
             for w in c[0]:
                 word = w
                 if word[:2] != "//":
@@ -43,44 +50,42 @@ class Features(object):
                     all_words.append(word.lower())
         all_words = FreqDist(all_words)
         word_features = list(all_words.keys())[:4000]
-
         featuresets = []
-        for (comment, label) in comments:
-            featuresets.append((self.find_features(comment,word_features), label))
-
+        for (words, label) in body:
+            featuresets.append((self.find_features(words,word_features), label))
         return featuresets
 
 class Threads(object):
     '''
-    This file will create threads from a given database and put them in the
-    given folder.
+    Object to create and store threads with
     '''
-    def __init__(self,database,folder):
+    def __init__(self,database):
         self.database = database
-        self.folder = folder
 
-    def search_roots(self, cursor,p_id,thread_file):
-        cursor.execute('SELECT body, comment_id  FROM comments WHERE parent_id = ?',(p_id,))
+    def search_roots(self,cursor,p_id,thread_file):
+        cursor.execute('SELECT body, comment_id FROM comments WHERE parent_id = ?',(p_id,))
         children = cursor.fetchall()
         for c in children:
             thread_file.write(c[0] + '\n')
             self.search_roots(cursor,c[1], thread_file)
 
-    def make_thread(self,submission):
+    def make_threads(self,submission,folder):
         db = sqlite3.connect(self.database)
         cur = db.cursor()
         cur.execute('''
-        SELECT c.comment_id, c.body, s.label
+        SELECT c.comment_id, c.body
         FROM comments as c, submissions as s
         WHERE c.submission_id = s.submission_id
         AND c.parent_id = ?
         ''',(submission,))
+
         parents = cur.fetchall()
         for p in parents:
-            file_name = self.folder + p[2] + '_' + p[0] + ".txt"
-            with open(file_name,"w") as file:
-                file.write(p[1] + '\n')
-                self.search_roots(cur,p[0], file)
+            file_name = folder + p[0] + ".txt"
+            with open(file_name,"w", encoding='utf-8', newline='') as file:
+                file.write(p[1])
+                self.search_roots(cur,p[0],file)
                 file.close
+
         db.commit()
         db.close()
