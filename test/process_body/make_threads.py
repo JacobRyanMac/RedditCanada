@@ -22,7 +22,7 @@ db.close()
 th = Threads(database)
 
 for s in submissions:
-    print(s[0],s[1],'is being added...')
+    print(s[1],s[0],'is being added...')
     print('Currently:',submissions.index(s)+1,'of',len(submissions))
     folder = thread_folder + s[1] + '/'
     th.make_threads(s[0], folder)
