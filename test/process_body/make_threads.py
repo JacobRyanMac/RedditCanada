@@ -25,4 +25,4 @@ for s in submissions:
     print(s[1],s[0],'is being added...')
     print('Currently:',submissions.index(s)+1,'of',len(submissions))
     folder = thread_folder + s[1] + '/'
-    th.make_threads(s[0], folder)
+    th.create_threads(s[0], folder)
