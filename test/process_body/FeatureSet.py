@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import random
 import nltk
@@ -12,36 +13,31 @@ class Features(object):
     Example:
         [("this is an example", Internet),
          ("strings can be threads or comments!", Housing)]
-    """
-    def __init__(self, body=None):
-        self.body = body
 
-    '''
     This method can create bodies if given a SQL statement with the form:
     SELECT c.body, s.label
     FROM comments as c, submissions as s
-    (The WHERE statement can be anything as long as it returns the correct SELECT)
-    '''
-    def execute_query(self, SQL_query, SQL_db):
-        db = sqlite3.connect(SQL_db)
+    """
+    def __init__(self, SQL_query=None, SQL_db=None, body=None):
+        self.body = body
+        self.SQL_query = SQL_query
+        self.SQL_db = SQL_db
+        if self.body is None and SQL_query is not None:
+            self.query_body()
+
+    def query_body(self):
+        db = sqlite3.connect(self.SQL_db)
         cur = db.cursor()
-        cur.execute(SQL_query)
-        body = [(word_tokenize(c[0]), c[1]) for c in cur]
+        cur.execute(self.SQL_query)
+        body = [(c[0], c[1]) for c in cur]
         db.close()
         self.body = body
 
-    @staticmethod
-    def find_features(body, feature_list):
-        words = set(body)
-        features = {}
-        for w in feature_list:
-            features[w] = (w in words)
-        return features
-
-    def make_featureset(self, body):
-        random.shuffle(body)
+    def make_featureset(self):
+        token_body = [(word_tokenize(b),l) for (b,l) in self.body]
+        random.shuffle(token_body)
         all_words = []
-        for c in body:
+        for c in token_body:
             for w in c[0]:
                 word = w
                 if word[:2] != "//":
@@ -51,15 +47,23 @@ class Features(object):
         all_words = FreqDist(all_words)
         word_features = list(all_words.keys())[:4000]
         featuresets = []
-        for (words, label) in body:
+        for (words, label) in token_body:
             featuresets.append((self.find_features(words,word_features), label))
         return featuresets
 
+    @staticmethod
+    def find_features(body, feature_list):
+        words = set(body)
+        features = {}
+        for w in feature_list:
+            features[w] = (w in words)
+        return features
+
 class Threads(object):
     '''
-    Object to create and store threads with
+    Object to create and transfer threads with
     '''
-    def __init__(self,database):
+    def __init__(self,database=None):
         self.database = database
 
     def search_roots(self,cursor,p_id,thread_file):
@@ -69,7 +73,7 @@ class Threads(object):
             thread_file.write(c[0] + '\n')
             self.search_roots(cursor,c[1], thread_file)
 
-    def make_threads(self,submission,folder):
+    def create_threads(self,submission,folder):
         db = sqlite3.connect(self.database)
         cur = db.cursor()
         cur.execute('''
@@ -89,3 +93,13 @@ class Threads(object):
 
         db.commit()
         db.close()
+
+    def make_body(self,labels,folder):
+        body = []
+        for label in labels:
+            directory = os.fsencode(folder.encode('utf-8') + label.encode('utf-8') +b'/')
+            for file in os.listdir(directory):
+                with open(directory + file,'r', encoding='utf-8') as th_file:
+                    text = str(th_file.read())
+                    body.append((text,label))
+        return body
