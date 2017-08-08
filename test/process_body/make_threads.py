@@ -10,11 +10,9 @@ cur = db.cursor()
 cur.execute('''
 SELECT s.submission_id, s.label
 FROM submissions as s
-WHERE (s.label = "Internet"
-OR s.label = "Housing"
-OR s.label = "Pot")
-AND s.created <= "2017-08-01"
-AND s.created >= "2017-07-01";
+WHERE (s.label = "Politics"
+OR s.label = "Fluff"
+OR s.label = "News");
 ''')
 submissions = cur.fetchall()
 db.close()
