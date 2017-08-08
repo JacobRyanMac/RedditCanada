@@ -10,15 +10,13 @@ cur = db.cursor()
 cur.execute('''
 SELECT s.submission_id, s.label
 FROM submissions as s
-WHERE (s.label = "Politics"
-OR s.label = "Fluff"
-OR s.label = "News");
+WHERE s.created <= "2017-08-08"
+AND s.created >= "2017-08-03";
 ''')
 submissions = cur.fetchall()
 db.close()
 
 th = Threads(database)
-
 for s in submissions:
     print(s[1],s[0],'is being added...')
     print('Currently:',submissions.index(s)+1,'of',len(submissions))

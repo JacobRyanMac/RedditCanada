@@ -1,16 +1,16 @@
-from redditSQL import SQL_submission, SQL_comment
-import datetime, time
 import praw
+import datetime, time
 import sqlite3 as sql
+from redditSQL import SQL_submission, SQL_comment
 
 # Constants
-whichDatabase = r"canada_subreddit_test.db"
+whichDatabase = r'canada_subreddit.db'
 whichSubreddit = 'canada'
 scoreMin = 50
 commentMin = 50
 commentLimit = 100
 commentThreshold = 0
-days_back = 2
+days_back = 4
 ext_to = datetime.datetime.now()
 #ext_to = datetime.datetime(2017, 6, 7, 12, 0, 0, 0)
 ext_from = ext_to - datetime.timedelta(days=days_back)
