@@ -1,8 +1,8 @@
 import sqlite3
-from FeatureSet import Threads
+from redditSQL import Threads
 
 submission_id = "6ehv49"
-database = '../canada_subreddit_test.db'
+database = 'canada_subreddit.db'
 thread_folder = 'threads/'
 
 db = sqlite3.connect(database)

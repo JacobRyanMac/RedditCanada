@@ -28,7 +28,7 @@ OR s.label = "Pot");
 split = lambda x: - int(len(x) / 5)
 
 # Connect to database a obtain all comments with given labels
-db = sqlite3.connect('../canada_subreddit_test.db')
+db = sqlite3.connect('canada_subreddit.db')
 cur = db.cursor()
 cur.execute(SQL_query)
 

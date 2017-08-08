@@ -1,16 +1,19 @@
 import pickle
 import nltk
-from FeatureSet import Features
-from FeatureSet import Threads
+from redditSQL import Features
 
-pickle_file = "NB_classifier_threads.pickle"
-database = '../canada_subreddit_test.db'
-thread_folder = 'threads/'
-labels = ['Housing','Pot']
+pickle_file = "naive_bayes_classifier.pickle"
+database = 'canada_subreddit.db'
+SQL_query = '''
+SELECT c.body, s.label
+FROM submissions as s, comments as c
+WHERE s.submission_id = c.submission_id
+AND (s.label = "Internet"
+OR s.label = "Housing"
+OR s.label = "Pot");
+'''
 
-th = Threads(database)
-thread_body = th.make_body(labels,thread_folder)
-featuresets = Features(body=thread_body).make_featureset()
+featuresets = Features(SQL_query,database).make_featureset()
 
 split = lambda x: - int(len(x) / 5)
 k = split(featuresets)

@@ -8,6 +8,7 @@ from nltk import FreqDist
 from nltk.tokenize import word_tokenize
 
 pickle_file = "logreg_classifier.pickle"
+database = 'canada_subreddit.db'
 SQL_query = '''
 SELECT c.body, s.title, s.label
 FROM comments as c, submissions as s
@@ -17,7 +18,7 @@ AND s.created >= '2017-07-27';
 '''
 
 # Connect to database a obtain all comments with given labels
-db = sqlite3.connect('../canada_subreddit_test.db')
+db = sqlite3.connect(database)
 cur = db.cursor()
 cur.execute(SQL_query)
 comments = [(c[0],c[1],c[2]) for c in cur]
