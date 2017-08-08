@@ -6,7 +6,7 @@ from FeatureSet import Threads
 pickle_file = "NB_classifier_threads.pickle"
 database = '../canada_subreddit_test.db'
 thread_folder = 'threads/'
-labels = ['Pot','Housing','Internet']
+labels = ['Housing','Pot']
 
 th = Threads(database)
 thread_body = th.make_body(labels,thread_folder)
