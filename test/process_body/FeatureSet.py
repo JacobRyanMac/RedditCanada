@@ -45,7 +45,7 @@ class Features(object):
                         word = word.replace('*','')
                     all_words.append(word.lower())
         all_words = FreqDist(all_words)
-        word_features = list(all_words.keys())[:4000]
+        word_features = list(all_words.keys())[:3000]
         featuresets = []
         for (words, label) in token_body:
             featuresets.append((self.find_features(words,word_features), label))
@@ -63,8 +63,8 @@ class Threads(object):
     '''
     Object to create and transfer threads with
     '''
-    def __init__(self,database=None):
-        self.database = database
+    def __init__(self,SQL_db=None):
+        self.SQL_db = SQL_db
 
     def search_roots(self,cursor,p_id,thread_file):
         cursor.execute('SELECT body, comment_id FROM comments WHERE parent_id = ?',(p_id,))
@@ -74,7 +74,7 @@ class Threads(object):
             self.search_roots(cursor,c[1], thread_file)
 
     def create_threads(self,submission,folder):
-        db = sqlite3.connect(self.database)
+        db = sqlite3.connect(self.SQL_db)
         cur = db.cursor()
         cur.execute('''
         SELECT c.comment_id, c.body
