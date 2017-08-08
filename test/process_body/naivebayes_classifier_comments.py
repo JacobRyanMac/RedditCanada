@@ -1,4 +1,4 @@
-Wimport pickle
+import pickle
 import nltk
 from FeatureSet import Features
 
