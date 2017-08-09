@@ -57,9 +57,3 @@ for submis in allSubmissions:
                     db.execute(cur_comment.make_user_query(False))
             db.commit()
     db.close()
-
-# Too much trouble to fix the NULL statements otherwise:
-# db = sql.connect(whichDatabase)
-# db.execute("UPDATE comments SET edited = NULL WHERE edited = 'NULL';")
-# db.commit()
-# db.close()
