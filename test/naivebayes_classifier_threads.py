@@ -2,10 +2,10 @@ import pickle
 import nltk
 from redditSQL import Features, Threads
 
-pickle_file = "NB_classifier_threads.pickle"
+pickle_file = "naivebayes_threads.pickle"
 database = 'canada_subreddit.db'
 thread_folder = 'threads/'
-labels = ['Politics','News']
+labels = ['Climate','Housing']
 
 th = Threads(database)
 thread_body = th.make_body(labels,thread_folder)
@@ -22,6 +22,6 @@ Naive_classifier = nltk.NaiveBayesClassifier.train(training_set)
 print("Naive Bayes accuracy percent:", (nltk.classify.accuracy(Naive_classifier, testing_set)))
 Naive_classifier.show_most_informative_features(20)
 
-# with open(pickle_file,"wb") as save_classifier:
-#     pickle.dump(Naive_classifier, save_classifier)
-#     save_classifier.close()
+with open(pickle_file,"wb") as save_classifier:
+    pickle.dump(Naive_classifier, save_classifier)
+    save_classifier.close()

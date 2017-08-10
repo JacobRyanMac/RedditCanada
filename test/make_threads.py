@@ -10,8 +10,8 @@ cur = db.cursor()
 cur.execute('''
 SELECT s.submission_id, s.label
 FROM submissions as s
-WHERE s.created <= "2017-08-08"
-AND s.created >= "2017-08-03";
+WHERE s.created <= "2017-08-09"
+AND s.created >= "2017-08-07";
 ''')
 submissions = cur.fetchall()
 db.close()
