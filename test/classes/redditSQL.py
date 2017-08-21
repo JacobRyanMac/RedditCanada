@@ -200,16 +200,8 @@ class SQL_submission(object):
                 s_created,
                 submis_label)
         else:
-            query = '''
-            UPDATE submissions
-            SET upvotes = ,
-            ratio = "{}",
-            score = "{}",
-            comments = "{}",
-            reports = "{}",
-            locked = "{}"
-            WHERE submission_id = "{}"
-            '''.format(
+            query = "UPDATE submissions SET " + \
+            "upvotes = '{}', ratio = '{}', score = '{}', comments = '{}', reports = '{}', locked = '{}' WHERE submission_id = '{}'".format(
                     str(cur_submis.ups),
                     str(cur_submis.upvote_ratio),
                     str(cur_submis.score),
@@ -218,7 +210,6 @@ class SQL_submission(object):
                     str(cur_submis.locked),
                     cur_submis.id)
         return query
-
 
     def make_user_query(self, insert):
         entry = self.submis
