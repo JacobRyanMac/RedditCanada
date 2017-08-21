@@ -6,7 +6,7 @@ from Database import Query
 from Query import SubmissionQuery, CommentQuery, UserQuery
 
 # Constants
-whichDatabase = r'../canada_subreddit.db'
+whichDatabase = r'canada_subreddit.db'
 whichSubreddit = 'canada'
 commentMin = 50
 commentLimit = 100
