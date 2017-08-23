@@ -3,7 +3,7 @@ import sqlite3
 from Database import Query
 from Labels import LabelMaker
 
-# Need a "fake" submission in order to work with redditSQL
+# Need a "fake" submission in order to work with new stupid stuff
 class fakeSubmis:
     def __init__(self,name,domain):
         self.name = name

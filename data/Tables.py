@@ -7,7 +7,12 @@ Do we only need the names associated with the tables in the submission
 
 
 class SubmissionTable(Database):
-	self.submission_id='submission_id'
+	def __init__(self):
+		columns={
+
+		}
+
+	submission_id=
 	user_id'
 	subreddit_id`	TEXT,
 	title`	TEXT,
