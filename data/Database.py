@@ -1,14 +1,12 @@
 import os
 import sqlite3
-import random
-import nltk
-
 from datetime import datetime
 from pytz import timezone
 
-from nltk import FreqDist
-from nltk.tokenize import word_tokenize
-
+# import nltk
+# import random
+# from nltk import FreqDist
+# from nltk.tokenize import word_tokenize
 
 class Database(object):
     def __init__(self,directory=None):

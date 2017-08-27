@@ -1,10 +1,19 @@
+'''
+what do we got:
+files
+initial comment
+folders
+'''
+import os
 
-class Thread(Body,Query):
-    '''
-    Object to create and transfer threads with
-    '''
-    def __init__(self,SQL_db=None):
-        self.SQL_db = SQL_db
+class Thread(object):
+    def __init__(self,top_comment):
+        self.top_comment = top_comment
+
+class ThreadMaker(Query,Thread):
+    def __init__(self,db_directory,deposit):
+        super(Query,self).__init__(db_directory)
+        self.deposit = deposit
 
     def search_roots(self,cursor,p_id,thread_file):
         cursor.execute('SELECT body, comment_id FROM comments WHERE parent_id = ?',(p_id,))
@@ -14,8 +23,8 @@ class Thread(Body,Query):
             self.search_roots(cursor,c[1], thread_file)
 
     def create_threads(self,submission,folder):
-        db = sqlite3.connect(self.SQL_db)
-        cur = db.cursor()
+        self.connect()
+        cur = self.cursor()
         cur.execute('''
         SELECT c.comment_id, c.body
         FROM comments as c, submissions as s

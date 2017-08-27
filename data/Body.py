@@ -1,7 +1,7 @@
-# body is a comment. All string manipulation is done to the body, pardon for the label
+# import Labels
+import random
 from nltk import word_tokenize
-
-import Labels
+from nltk.probability import FreqDist
 from Database import Query
 
 class Body(object):
@@ -27,32 +27,35 @@ class Body(object):
 
 class Feature(Body):
     def __init__(self,body,label=None):
-        super(FeatureSet,self).__init__(body)
+        super(Feature,self).__init__(body)
         self.label = label
-        # self.word_features = self.choose_features()
+        # self.word_features =
 
-    def word_features(self):
-        all_words = FreqDist(self.tokens)
-        word_features = list(all_words.keys())[:3000]
-        return word_features
-
-    def create_feature(self):
-        # featuresets = []
-        # for (words, label) in token_body:
+    def create_feature(self, word_bank):
         words = set(self.tokens)
         features = {}
-        for w in self.word_features():
+        for w in word_bank:
             features[w] = (w in words)
-        return (features,self.label)
+        return features, self.label
 
 class FeaturePipeline(Feature):
     def __init__(self):
+        pass
         # self.data = data
 
-    def feature_set(self, data):
-        # data is a list of tuples ie [(body,label), (body,label),...]
-        # mostly for cursors in queries, but could be anything really
+    def create_set(self, data):
+        random.shuffle(data)
+        wb = self.gather_features(data)
         fs = []
         for d in data:
-            fs.append(Feature(d[0],d[1]).create_feature())
+            fs.append((Feature(d[0],d[1]).create_feature(wb)))
         return fs
+
+    def gather_features(self, data):
+        all_bodies = []
+        for d in data:
+            for t in Body(d[0]).tokens:
+                all_bodies.append(t)
+        all_words = FreqDist(all_bodies)
+        word_features = list(all_words.keys())[:3000]
+        return word_features
