@@ -9,7 +9,6 @@ class fakeSubmis:
         self.name = name
         self.domain = domain
 
-
 whichDatabase = r"canada_subreddit.db"
 db = Query(whichDatabase)
 

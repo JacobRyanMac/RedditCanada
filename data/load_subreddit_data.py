@@ -27,10 +27,12 @@ canada = reddit.subreddit('canada')
 # Extract submisions
 allSubmissions = canada.submissions(int(time.mktime(ext_from.timetuple())),
                                     int(time.mktime(ext_to.timetuple())))
-# Load the data into sqlite3ite
+
+# Load the data into sqlite3
 for submis in allSubmissions:
     db = Query(whichDatabase)
     db.connect()
+
     if submis.num_comments >= commentMin:
         # Enter submission:
         sq = SubmissionQuery(submis)
@@ -38,6 +40,7 @@ for submis in allSubmissions:
             db.execute(sq.insert())
         except sqlite3.IntegrityError:
             db.execute(sq.update())
+
         # Enter users:
         uq = UserQuery(submis)
         if uq.id is not None:
@@ -57,6 +60,7 @@ for submis in allSubmissions:
                 db.execute(cq.insert())
             except sqlite3.IntegrityError as e:
                 db.execute(cq.update())
+
             # User:
             uq = UserQuery(c)
             if uq.id is not None:
